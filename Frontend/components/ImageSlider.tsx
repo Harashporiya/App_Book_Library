@@ -1,10 +1,13 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { RouteType } from './Navigation';
 
 const { width } = Dimensions.get('window');
 
 const ImageSlider = () => {
+  const navigation = useNavigation<NavigationProp<RouteType>>();
   const images = [
     {
       image: "https://images.rawpixel.com/dark_image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAyL3YxMTItdGFuZy0zMS1ib29rc3RvcmUtam9iMTczNy5wbmc.png",
@@ -42,7 +45,7 @@ const ImageSlider = () => {
           ))}
         </Swiper>
       </View>
-      <Text style={styles.button}>Continue</Text>
+      <Text style={styles.button} onPress={()=>navigation.navigate("Signup")}>Continue</Text>
     </View>
   );
 };

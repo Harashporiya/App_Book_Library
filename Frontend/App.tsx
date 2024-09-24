@@ -4,6 +4,8 @@ import BooklyLogo from './components/BookLogo';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import ImageSlider from './components/ImageSlider';
+import SignupForm from './components/signup/SignupForm';
+import SigninForm from './components/signin/SigninForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,22 +19,38 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {isLoading ? (
+  if (isLoading) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
           <Stack.Screen
-            name='book'
+            name="book"
             component={BooklyLogo}
             options={{ headerShown: false }}
           />
-        ) : (
-          <Stack.Screen
-            name='ImageSlider'
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+      <Stack.Screen
+            name="ImageSlider"
             component={ImageSlider}
             options={{ headerShown: false }}
           />
-        )}
+        <Stack.Screen
+          name="Signup"
+          component={SignupForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Signin"
+          component={SigninForm}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
