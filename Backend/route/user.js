@@ -52,15 +52,14 @@ router.put("/changePassword/:_id", async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
         const hashPassword = await bcrypt.hash(password, 10);
-        const userUpdate = await User.updateOne({
-            _id: _id},
-           { password: hashPassword
-        })
+        const userUpdate = await User.updateOne(
+            {id: _id},
+           { password: hashPassword})
 
-        res.status(200).json({ message: 'Password updated successfully', userUpdate });
+        return res.status(200).json({ message: 'Password updated successfully', userUpdate });
     } catch (error) {
-        console.error("Error during password update:", error);
-        res.status(500).json({ error: 'Server error' });
+       
+        return res.status(500).json({ error: 'Server error' });
     }
 })
 
