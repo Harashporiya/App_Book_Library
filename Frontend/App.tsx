@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import ImageSlider from './components/ImageSlider';
 import SignupForm from './components/signup/SignupForm';
 import SigninForm from './components/signin/SigninForm';
-
+import ShowBook from "./components/Book/ShowBook"
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -36,7 +36,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
             name="ImageSlider"
             component={ImageSlider}
             options={{ headerShown: false }}
@@ -50,7 +50,9 @@ const App = () => {
           name="Signin"
           component={SigninForm}
           options={{ headerShown: false }}
-        />
+        /> */}
+        <Stack.Screen
+        name='Book' component={ShowBook} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
