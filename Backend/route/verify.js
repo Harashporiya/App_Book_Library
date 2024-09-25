@@ -52,10 +52,9 @@ router.post("/sendCode", async (req, res) => {
             { upsert: true, new: true } 
         );
         await sendVerificationCode(email, verificationCode);
-        res.status(200).json({ message: 'Verification code sent successfully', user });
+       return  res.status(200).json({ message: 'Verification code sent successfully', user });
     } catch (error) {
-        console.error('Error sending verification code:', error);
-        res.status(500).json({ error: 'An error occurred while sending the verification code' });
+      return res.status(500).json({ error: 'An error occurred while sending the verification code' });
     }
 });
 
@@ -70,8 +69,7 @@ router.post("/verifyCode", async (req, res) => {
             res.status(400).json({ message: 'Invalid verification code' });
         }
     } catch (error) {
-        console.error('Error during verification:', error);
-        res.status(500).json({ error: 'An error occurred during verification' });
+        return res.status(500).json({ error: 'An error occurred during verification' });
     }
 });
 
