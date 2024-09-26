@@ -44,6 +44,7 @@ const SigninForm = () =>{
                     style={styles.input} 
                     value={password}
                     onChangeText={text=>setPassword(text)}/>
+                    <Text style={{color:"red", fontSize:18, marginLeft:20}} onPress={()=>navigation.navigate('forgotpassword')}>Forgot password</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={handelSubmit}>
                 <Text style={styles.btn}>sign in</Text>

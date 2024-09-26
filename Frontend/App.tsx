@@ -9,6 +9,7 @@ import SigninForm from './components/signin/SigninForm';
 import ShowBook from "./components/Book/ShowBook"
 import BookId from './components/Book/BookId';
 import { RootRouteType } from './components/Navigation';
+import ForGotPassword from './components/ForgotPassword/ForgotPassword';
 const Stack = createNativeStackNavigator<RootRouteType>();
 
 const App = () => {
@@ -38,7 +39,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      {/* <Stack.Screen
+      <Stack.Screen
             name="ImageSlider"
             component={ImageSlider}
             options={{ headerShown: false }}
@@ -52,10 +53,12 @@ const App = () => {
           name="Signin"
           component={SigninForm}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
         name='Book' component={ShowBook} options={{headerShown:false}}/>
         <Stack.Screen name='bookId' component={BookId} options={{headerShown:false}}/>
+
+        <Stack.Screen name='forgotpassword' component={ForGotPassword} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
