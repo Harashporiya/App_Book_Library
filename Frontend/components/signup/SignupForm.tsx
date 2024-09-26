@@ -31,6 +31,7 @@ const SignupForm = () => {
            setLastName("");
            setEmail("");
            setPassword("");
+           navigation.navigate("Book")
        } catch (error) {
           Alert.alert("error", "Failed account created");
        }
