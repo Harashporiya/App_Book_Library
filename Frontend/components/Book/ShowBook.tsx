@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, TextInput } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { BOOK_API_KEY } from '../../API_Backends/Api_backend';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RouteType } from '../Navigation';
 
 interface BookType {
     volumeInfo: {
@@ -18,12 +19,19 @@ interface BookType {
 
 const ShowBook = () => {
     const [bookData, setBookData] = useState<BookType[]>([]);
+    const [latestBook, setLatestBook] = useState<BookType[]>([]);
     const [search, setSearch] = useState('');
+    const navigation = useNavigation<NavigationProp<RouteType>>();
+
+    const bookId = (id: string) => {
+        console.log(id);
+        navigation.navigate("bookId",{bookId:id})
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}+Any&key=${BOOK_API_KEY}`);
+                const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}+All&key=${BOOK_API_KEY}`);
                 setBookData(response.data.items);
             } catch (error) {
                 console.log("Error:", error);
@@ -31,6 +39,18 @@ const ShowBook = () => {
         };
         fetchData();
     }, [search]);
+
+    useEffect(() => {
+        const fetchDataLatestBook = async () => {
+            try {
+                const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=newest&key=${BOOK_API_KEY}`);
+                setLatestBook(response.data.items);
+            } catch (error) {
+                console.log("Error:", error);
+            }
+        };
+        fetchDataLatestBook();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -41,6 +61,7 @@ const ShowBook = () => {
                     <View style={styles.circleO} />
                     <Text style={styles.logo}>KLY</Text>
                 </View>
+                
                 <View style={styles.searchContainer}>
                     <FontAwesome name="search" size={24} color="white" style={styles.searchIcon} />
                     <TextInput
@@ -53,32 +74,42 @@ const ShowBook = () => {
                 </View>
             </View>
 
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScrollView}>
-                {bookData.map((book: BookType) => (
-                    <View key={book.id} style={styles.horizontalBookContainer}>
-                        <Image
-                            source={{ uri: book.volumeInfo.imageLinks?.thumbnail }}
-                            style={styles.horizontalBookImage}
-                        />
-                    </View>
-                ))}
-            </ScrollView>
+            <ScrollView>
+                <Text style={{color:"white", fontSize:20, padding:10}}>Newest Book</Text>
+                <ScrollView horizontal style={styles.horizontalScrollView}>
+                    {latestBook.map((book: BookType) => (
+                        <TouchableOpacity key={book.id} onPress={() => bookId(book.id)}>
+                            <View style={styles.horizontalBookContainer}>
+                                <Image
+                                    source={{ uri: book.volumeInfo.imageLinks?.thumbnail }}
+                                    style={styles.horizontalBookImage}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
 
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.verticalScrollView}>
-                {bookData.map((book: BookType) => (
-                    <View key={book.id} style={styles.verticalBookContainer}>
-                        <Image
-                            source={{ uri: book.volumeInfo.imageLinks?.thumbnail }}
-                            style={styles.verticalBookImage}
-                        />
-                        <View style={styles.bookDetails}>
-                            <Text style={styles.bookTitle}>{book.volumeInfo.title}</Text>
-                            <Text style={styles.bookAuthor}>
-                                by {book.volumeInfo.authors?.join(', ')}
-                            </Text>
-                        </View>
-                    </View>
-                ))}
+                <View>
+                    <Text style={{color:"white", fontSize:20, padding:10}}>All Book</Text>
+                    <ScrollView showsVerticalScrollIndicator={false} style={styles.verticalScrollView}>
+                        {bookData.map((book: BookType) => (
+                            <TouchableOpacity key={book.id} onPress={() => bookId(book.id)}>
+                                <View style={styles.verticalBookContainer}>
+                                    <Image 
+                                        source={{ uri: book.volumeInfo.imageLinks?.thumbnail }}
+                                        style={styles.verticalBookImage}
+                                    />
+                                    <View style={styles.bookDetails}>
+                                        <Text style={styles.bookTitle}>{book.volumeInfo.title}</Text>
+                                        <Text style={styles.bookAuthor}>
+                                            by {book.volumeInfo.authors?.join(', ')}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
             </ScrollView>
         </View>
     );
@@ -140,17 +171,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     verticalScrollView: {
-        flex: 1,
+        flex:1,
     },
     verticalBookContainer: {
         flexDirection: 'row',
         padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#2a1a43',
     },
     verticalBookImage: {
-        width: 80,
-        height: 120,
+        width: 120,
+        height: 180,
         resizeMode: 'cover',
         borderRadius: 5,
     },

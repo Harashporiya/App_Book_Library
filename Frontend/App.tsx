@@ -7,7 +7,9 @@ import ImageSlider from './components/ImageSlider';
 import SignupForm from './components/signup/SignupForm';
 import SigninForm from './components/signin/SigninForm';
 import ShowBook from "./components/Book/ShowBook"
-const Stack = createNativeStackNavigator();
+import BookId from './components/Book/BookId';
+import { RootRouteType } from './components/Navigation';
+const Stack = createNativeStackNavigator<RootRouteType>();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +55,7 @@ const App = () => {
         /> */}
         <Stack.Screen
         name='Book' component={ShowBook} options={{headerShown:false}}/>
+        <Stack.Screen name='bookId' component={BookId} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
