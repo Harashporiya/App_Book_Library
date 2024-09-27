@@ -4,6 +4,7 @@ export type RouteType={
     bookId: { bookId: string };
     Book:undefined;
     forgotpassword:undefined;
+    passwordChange:undefined;
 }
 export type RootRouteType={
     Signup:undefined;
@@ -13,4 +14,5 @@ export type RootRouteType={
     book:undefined;
     ImageSlider:undefined;
     forgotpassword:undefined;
+    passwordChange:undefined;
 }

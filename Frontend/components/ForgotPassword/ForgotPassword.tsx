@@ -38,9 +38,12 @@ const ForGotPassword = () => {
             })
             setEmail("")
             setVerifyCode("")
-            console.log(response.data)
+            Alert.alert("success","Account verify successfull");
+            navigation.navigate("passwordChange");
+            // console.log(response.data)
         } catch (error) {
             console.log("Error", error)
+            Alert.alert("Error", "Failed account verify");
         }
     }
     return (

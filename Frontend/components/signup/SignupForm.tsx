@@ -26,6 +26,7 @@ const SignupForm = () => {
            })
            Alert.alert("success","Account Created Successfull")
            AsyncStorage.setItem("userId", response.data.accountCreate._id)
+           AsyncStorage.setItem("emailId", response.data.accountCreate.email)
            AsyncStorage.setItem("token", response.data.token)
            setFirstName("");
            setLastName("");

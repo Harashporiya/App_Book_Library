@@ -4,6 +4,7 @@ import { StyleSheet, TextInput, View,Text, TouchableOpacity, Alert } from 'react
 import { RouteType } from '../Navigation'
 import axios from 'axios'
 import { API_BACKEND } from '../../API_Backends/Api_backend'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SigninForm = () =>{
     const navigation = useNavigation<NavigationProp<RouteType>>();
@@ -14,14 +15,21 @@ const SigninForm = () =>{
             Alert.alert("Error", "All fields are required!")
             return;
         }
+        const emailId = await AsyncStorage.getItem("emailId");
+        console.log("Email id is user:", emailId)
         try {
             const response = await axios.post(`${API_BACKEND}/user/signin`,{
                 email,
                 password,
             })
-            Alert.alert("success","Signin Successfull")
-            setEmail('')
-            setPassword('')
+            if(emailId === email){
+                Alert.alert("success","Signin Successfull")
+                navigation.navigate("Book")
+                setEmail('')
+               setPassword('')
+            }else{
+                Alert.alert("error", "This email not account create");
+            }
         } catch (error) {
             Alert.alert("Error", "Failed signin")
         }
@@ -43,7 +51,7 @@ const SigninForm = () =>{
                     placeholderTextColor={"white"}
                     style={styles.input} 
                     value={password}
-                    onChangeText={text=>setPassword(text)}/>
+                    onChangeText={(text)=>setPassword(text)}/>
                     <Text style={{color:"red", fontSize:18, marginLeft:20}} onPress={()=>navigation.navigate('forgotpassword')}>Forgot password</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={handelSubmit}>

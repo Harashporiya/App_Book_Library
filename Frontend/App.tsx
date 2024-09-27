@@ -10,6 +10,7 @@ import ShowBook from "./components/Book/ShowBook"
 import BookId from './components/Book/BookId';
 import { RootRouteType } from './components/Navigation';
 import ForGotPassword from './components/ForgotPassword/ForgotPassword';
+import PasswordChange from './components/PasswordChange/PasswordChange';
 const Stack = createNativeStackNavigator<RootRouteType>();
 
 const App = () => {
@@ -59,6 +60,7 @@ const App = () => {
         <Stack.Screen name='bookId' component={BookId} options={{headerShown:false}}/>
 
         <Stack.Screen name='forgotpassword' component={ForGotPassword} options={{headerShown:false}}/>
+        <Stack.Screen name='passwordChange' component={PasswordChange} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

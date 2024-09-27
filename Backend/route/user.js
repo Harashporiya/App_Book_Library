@@ -26,9 +26,15 @@ router.post("/signin", async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email })
+       
+        if(!user){
+            return res.json({"message":"Account not found"})
+        }
+        
         const isPassword = await bcrypt.compare(password, user.password)
-        if (!isPassword) {
-            return res.json({ "message": "Password not correct" }).status(400)
+        
+        if(!isPassword){
+            return res.status(401).json({msg: "Password not match"})
         }
         const token = jwt.sign({ userId: user._id }, process.env.secretKey, { expiresIn: "2d" })
         return res.json({ "message": "Signin Successfull", token, user }).status(200)
@@ -39,6 +45,7 @@ router.post("/signin", async (req, res) => {
 
 router.put("/changePassword/:_id", async (req, res) => {
     const { _id } = req.params;
+    console.log(_id)
     const { password } = req.body
     if (!password || password.length < 6) {
         return res.status(400).json({ error: 'Password must be at least 6 characters long' });
@@ -51,10 +58,12 @@ router.put("/changePassword/:_id", async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        const hashPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log("new password: ",hashedPassword)
         const userUpdate = await User.updateOne(
             {id: _id},
-           { password: hashPassword})
+            {password:hashedPassword}
+          )
 
         return res.status(200).json({ message: 'Password updated successfully', userUpdate });
     } catch (error) {
