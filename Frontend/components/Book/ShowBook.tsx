@@ -134,13 +134,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         letterSpacing: 5,
+        marginHorizontal:2,
     },
     circleO: {
         width: 30,
         height: 30,
         borderRadius: 30,
         backgroundColor: 'white',
-        marginHorizontal: -5,
+        marginHorizontal: 2,
     },
     searchContainer: {
         flexDirection: 'row',

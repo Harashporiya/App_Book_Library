@@ -20,6 +20,7 @@ const PasswordChange = () => {
             })
             // console.log(response.data)
             Alert.alert("success","Password updated successfully")
+            navigation.navigate("Signin")
         } catch (error) {
            console.log("Error",error);  
            Alert.alert("Error", "Failed password updated"); 
