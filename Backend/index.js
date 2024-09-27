@@ -4,6 +4,7 @@ const userRouter = require("./route/user")
 const app = express();
 const cors = require("cors")
 const verifyRouter = require("./route/verify");
+const bookRouter = require("./route/bookStore")
 const PORT = 5000;
 
 mongoose.connect("mongodb://127.0.0.1:27017/bookLibrary", {
@@ -18,7 +19,7 @@ app.use(express.json());
 
 app.use("/user",userRouter)
 app.use("/api", verifyRouter)
-
+app.use("/api",bookRouter)
 app.get("/", async(req,res)=>{
     return res.send("Harash")
 })
