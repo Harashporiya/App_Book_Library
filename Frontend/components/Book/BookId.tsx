@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, ScrollView, Alert } from 'react-native';
 import { NavigationProp, RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { BOOK_API_KEY } from '../../API_Backends/Api_backend';
+import { API_BACKEND, BOOK_API_KEY } from '../../API_Backends/Api_backend';
 import { RouteType } from '../Navigation';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -33,6 +33,9 @@ const BookId: React.FC<BookIdProps> = ({ route }) => {
     const [relatedBooks, setRelatedBooks] = useState<BookType[]>([]);
     const { bookId } = route.params;
     const navigation = useNavigation<NavigationProp<RouteType>>();
+    
+
+   
 
     useEffect(() => {
         const fetchBookData = async () => {
@@ -74,12 +77,25 @@ const BookId: React.FC<BookIdProps> = ({ route }) => {
         );
     }
 
+    const storeBook=async(bookId:string)=>{
+      
+       
+        try {
+            const response = await axios.post(`${API_BACKEND}/api/book`,{bookId})
+            Alert.alert("success", "Book store successfully")
+            navigation.navigate("BookStore",{bookId:bookId})
+        } catch (error) {
+            console.error('Error saving book:', error);
+            Alert.alert('Error', 'Failed to store the book');
+        }
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Entypo name="cross" size={34} color="white" onPress={() => navigation.navigate("Book")} />
-                    <AntDesign name="shoppingcart" size={34} color="white" />
+                    <AntDesign onPress={()=>storeBook(bookId)} name="shoppingcart" size={34} color="white" />
                 </View>
                 <View style={styles.cardContainer}>
                     <Image

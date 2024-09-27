@@ -5,6 +5,7 @@ import { BOOK_API_KEY } from '../../API_Backends/Api_backend';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RouteType } from '../Navigation';
+import Footer from '../Footer/Footer';
 
 interface BookType {
     volumeInfo: {
@@ -26,6 +27,7 @@ const ShowBook = () => {
     const bookId = (id: string) => {
         console.log(id);
         navigation.navigate("bookId",{bookId:id})
+        // navigation.navigate("BookStore",{bookId:id})
     };
 
     useEffect(() => {
@@ -52,7 +54,7 @@ const ShowBook = () => {
         fetchDataLatestBook();
     }, []);
 
-    return (
+    return (<>
         <View style={styles.container}>
             <View style={styles.logoTextContainer}>
                 <View style={styles.logoText}>
@@ -112,6 +114,8 @@ const ShowBook = () => {
                 </View>
             </ScrollView>
         </View>
+        <Footer/>
+        </>
     );
 };
 
