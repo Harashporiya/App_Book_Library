@@ -16,7 +16,7 @@ const SigninForm = () =>{
             return;
         }
         const emailId = await AsyncStorage.getItem("emailId");
-        console.log("Email id is user:", emailId)
+        // console.log("Email id is user:", emailId)
         try {
             const response = await axios.post(`${API_BACKEND}/user/signin`,{
                 email,

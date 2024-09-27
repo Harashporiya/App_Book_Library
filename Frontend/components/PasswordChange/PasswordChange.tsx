@@ -13,7 +13,7 @@ const PasswordChange = () => {
  
     const handelSubmit=async()=>{
         const _id = await AsyncStorage.getItem("userId")
-        console.log("UserId:",_id)
+        // console.log("UserId:",_id)
         try {
             const response = await axios.put(`${API_BACKEND}/user/changePassword/${_id}`,{
                 password,
