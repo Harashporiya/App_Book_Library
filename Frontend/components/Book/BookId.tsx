@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, ScrollView } from 'react-native';
 import { NavigationProp, RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { BOOK_API_KEY } from '../../API_Backends/Api_backend';
 import { RouteType } from '../Navigation';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
 
 interface BookType {
     volumeInfo: {
@@ -31,19 +30,34 @@ type BookIdProps = {
 
 const BookId: React.FC<BookIdProps> = ({ route }) => {
     const [bookData, setBookData] = useState<BookType | null>(null);
+    const [relatedBooks, setRelatedBooks] = useState<BookType[]>([]);
     const { bookId } = route.params;
     const navigation = useNavigation<NavigationProp<RouteType>>();
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchBookData = async () => {
             try {
                 const response = await axios.get(`https://www.googleapis.com/books/v1/volumes/${bookId}?key=${BOOK_API_KEY}`);
                 setBookData(response.data);
             } catch (error) {
-                console.log("Error:", error);
+                console.log("Error fetching book data:", error);
             }
         };
-        fetchData();
+        fetchBookData();
+    }, [bookId]);
+
+    useEffect(() => {
+        const fetchRelatedBooks = async () => {
+            try {
+                const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=related:${bookId}&key=${BOOK_API_KEY}`);
+                if (response.data.items) {
+                    setRelatedBooks(response.data.items); 
+                }
+            } catch (error) {
+                console.log("Error fetching related books:", error);
+            }
+        };
+        fetchRelatedBooks();
     }, [bookId]);
 
     const handlePreviewPress = () => {
@@ -59,57 +73,62 @@ const BookId: React.FC<BookIdProps> = ({ route }) => {
             </View>
         );
     }
-    const amount = bookData.saleInfo?.listPrice?.amount;
-    const ratingCountFromAmount = (amount: number | undefined) => {
-        if (amount !== undefined) {
-            if (amount > 900) return 10;
-            if (amount > 800) return 9;
-            if (amount > 700) return 8;
-            if (amount > 600) return 7;
-            if (amount > 500) return 6;
-            if (amount > 400) return 5;
-            if (amount > 300) return 4;
-            if (amount > 200) return 3;
-            if (amount > 100) return 2;
-            return 1;
-        }
-        return 0;
-    };
-    const rating = ratingCountFromAmount(amount);
 
     return (
         <View style={styles.container}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Entypo name="cross" size={34} color="white" onPress={() => navigation.navigate("Book")} />
-                <AntDesign name="shoppingcart" size={34} color="white" />
-            </View>
-            <View style={styles.cardContainer}>
-                <Image
-                    source={{ uri: bookData.volumeInfo.imageLinks?.thumbnail }}
-                    style={styles.image}
-                />
-                <Text style={styles.title}>{bookData.volumeInfo.title}</Text>
+            <ScrollView>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <Entypo name="cross" size={34} color="white" onPress={() => navigation.navigate("Book")} />
+                    <AntDesign name="shoppingcart" size={34} color="white" />
+                </View>
+                <View style={styles.cardContainer}>
+                    <Image
+                        source={{ uri: bookData.volumeInfo.imageLinks?.thumbnail }}
+                        style={styles.image}
+                    />
+                    <Text style={styles.title}>{bookData.volumeInfo.title}</Text>
 
-                {bookData.volumeInfo.authors && (
-                    <Text style={styles.authors}>Authors: {bookData.volumeInfo.authors.join(', ')}</Text>
-                )}
-                <View style={{ flexDirection: "row" }}>
-                    <AntDesign name="star" size={24} color="gold" />
-                    <Text style={styles.title}>({rating}) </Text>
-                    <Text style={styles.title}>{bookData.saleInfo.listPrice?.amount}</Text>
-                </View>
-                <View style={styles.button}>
-                    <View>
-                        <Text style={styles.free}>Free</Text>
+                    {bookData.volumeInfo.authors && (
+                        <Text style={styles.authors}>Authors: {bookData.volumeInfo.authors.join(', ')}</Text>
+                    )}
+                    <View style={{ flexDirection: "row" }}>
+                        <AntDesign name="star" size={24} color="gold" />
                     </View>
-                    <TouchableOpacity
-                        style={{ backgroundColor: "#f98b60", borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
-                        onPress={handlePreviewPress}
-                    >
-                        <Text style={styles.freePreview}>Free Preview</Text>
-                    </TouchableOpacity>
+                    <View style={styles.button}>
+                        <View>
+                            <Text style={styles.free}>Free</Text>
+                        </View>
+                        <TouchableOpacity
+                            style={{ backgroundColor: "#f98b60", borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
+                            onPress={handlePreviewPress}
+                        >
+                            <Text style={styles.freePreview}>Free Preview</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
+
+                <View>
+                    <Text style={{color:"white",fontSize:20}}>Related Books</Text>
+                
+                <ScrollView horizontal style={{marginTop:30}}>
+                
+                    {relatedBooks && relatedBooks.length > 0 ? (
+                        
+                        relatedBooks.map((relatedBook) => (
+                           <View key={relatedBook.id}>
+                             <Image
+                                key={relatedBook.id}
+                                source={{ uri: relatedBook.volumeInfo.imageLinks?.thumbnail }}
+                                style={styles.relatedImage}
+                            />
+                           </View>
+                        ))
+                    ) : (
+                        <Text style={{ color: "white", fontSize: 16 }}>No related books available</Text>
+                    )}
+                </ScrollView>
+                </View>
+            </ScrollView>
         </View>
     );
 };
@@ -129,6 +148,12 @@ const styles = StyleSheet.create({
         height: 250,
         marginBottom: 20,
         borderRadius: 20,
+    },
+    relatedImage: {
+        width: 120,
+        height: 180,
+        marginRight: 10,
+        borderRadius: 10,
     },
     title: {
         fontSize: 18,
