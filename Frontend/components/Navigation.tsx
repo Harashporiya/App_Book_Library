@@ -18,3 +18,6 @@ export type RootRouteType={
     passwordChange:undefined;
     BookStore:{bookId:string};
 }
+export type booktypeStore={
+  BooKStore:undefined
+}

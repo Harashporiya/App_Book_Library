@@ -20,4 +20,15 @@ router.post("/book", async (req, res) => {
       }
 })
 
+router.get("/book/all",async(req,res)=>{
+  const {bookId} = req.body
+  try {
+    const book = await Book.find()
+    return res.json({"message":"All book id", book}).status(202);
+  } catch (error) {
+    return res.json({"message":"Failed all book"
+    }).status(500)
+  }
+})
+
 module.exports = router
