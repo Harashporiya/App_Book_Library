@@ -11,14 +11,23 @@ const Footer = () => {
 
   return (
     <View style={styles.container}>
-      <Entypo name="home" size={30} color="white" />
+      <View>
+      <Entypo name="home" onPress={()=>navigation.navigate("Book")} size={30} color="white" />
+        <Text style={{color:"white"}}>Home</Text>
+      </View>
+      <View>
       <AntDesign 
         name="shoppingcart" 
         onPress={() => navigation.navigate("BookStore", { bookId: "bookId" })} 
         size={30} 
         color="white" 
       />
+      <Text style={{color:'white', marginRight:0}}>Store</Text>
+      </View>
+      <View>
       <MaterialIcons name="favorite" size={30} color="white" />
+      <Text style={{color:"white"}}>Like</Text>
+      </View>
     </View>
   );
 };
