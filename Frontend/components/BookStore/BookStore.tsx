@@ -64,7 +64,8 @@ const BookStore: React.FC = () => {
             ) :(
                 bookData.length > 0 ? (
                     bookData.map((book, index) => (
-                        <View key={index} style={styles.bookItem}>
+                        <View style={{width:'50%'}}>
+                            <View key={index} style={styles.bookItem}>
                             {book.volumeInfo.imageLinks?.thumbnail ? (
                                 <Image
                                     source={{ uri: book.volumeInfo.imageLinks.thumbnail }}
@@ -74,11 +75,14 @@ const BookStore: React.FC = () => {
                                 <Text style={styles.noImage}>No image available</Text>
                             )}
                             <Text style={styles.title}>{book.volumeInfo.title}</Text>
+                            
                         </View>
+                            </View>
                     ))
                 ) : (
                     <Text style={{ color: "white" }}>No book data available</Text>
                 )
+                
             )}
           </View>
         </ScrollView>
@@ -100,7 +104,6 @@ const styles = StyleSheet.create({
     },
     bookItem: {
         marginBottom: 20,
-        width: '45%',
         alignItems: 'center',
     },
     image: {
