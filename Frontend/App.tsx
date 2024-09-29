@@ -41,7 +41,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      {/* <Stack.Screen
+      <Stack.Screen
             name="ImageSlider"
             component={ImageSlider}
             options={{ headerShown: false }}
@@ -55,7 +55,7 @@ const App = () => {
           name="Signin"
           component={SigninForm}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
         name='Book' component={ShowBook} options={{headerShown:false}}/>
         <Stack.Screen name='bookId' component={BookId} options={{headerShown:false}}/>
