@@ -43,7 +43,7 @@
 ### 1. Install React Native CLI
 ```bash
  npm install -g react-native-cli
- npx react-native init NewsApp --template react-native-template-typescript
+ npx react-native init BookApp --template react-native-template-typescript
  // React Navigation
  npm install @react-navigation/native @react-navigation/stack
 npm install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
